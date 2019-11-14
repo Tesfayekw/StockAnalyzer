@@ -136,5 +136,87 @@ public class StockReporter {
                 stockLog.setLog(e.getMessage());
                 dao.insertLog(stockLog);
             }
+        
+     //MarketWatch
+                
+            MarketWatchScraper marketWatchScraper = new MarketWatchScraper();
+            
+            logger.log(Level.INFO, "Scrap summary data for MarketWatch...");
+            
+            try{
+                stockDateStart = new SimpleDateFormat("yyyy-MM-dd-hhmmss").parse(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(new Date()));
+            }catch(ParseException pe) {logger.log(Level.WARNING, pe.getMessage());}
+            
+            stockLog.setStart_date(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(stockDateStart).toString());
+            try{
+                stockLog.setSource("MarketWatch");
+                
+                exceptionLogs = marketWatchScraper.scrapeAllSummaryData();
+                Date stockDateEnd = null;
+                
+                try{
+                    stockDateEnd = new SimpleDateFormat("yyyy-MM-dd").parse(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(new Date()));
+                }catch(ParseException pe) {logger.log(Level.WARNING, pe.getMessage());}
+                stockLog.setEnd_date(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(stockDateEnd).toString());
+                stockLog.setStatus("Success");
+                stockLog.setLog("MakretWatchScraper completed successfully!");
+                if(!exceptionLogs.isEmpty()){
+                    stockLog.setStatus("Failed");
+                    stockLog.setLog("" + exceptionLogs);
+                    dao.insertLog(stockLog);
+                }else{dao.insertLog(stockLog);}
+            
+            }catch(Exception e) {
+                logger.log(Level.WARNING, "Issue has occured and an exception was thorwn during MarketWatch Scrape");
+                Date stockDateEnd = null;
+                try{
+                    stockDateEnd = new SimpleDateFormat("yyyy-MM-dd-hhmmss").parse(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(new Date()));
+                }catch(ParseException pe) {logger.log(Level.WARNING, pe.getMessage());}
+                stockLog.setEnd_date(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(stockDateEnd).toString());
+                stockLog.setStatus("Failed");
+                stockLog.setLog(e.getMessage());
+                dao.insertLog(stockLog);
+            }
+            
+   //  Fidelity
+                
+           FidelityScraper fidelityScraper = new FidelityScraper();
+            
+            logger.log(Level.INFO, "Scrap summary data for Fidelity...");
+            
+            try{
+                stockDateStart = new SimpleDateFormat("yyyy-MM-dd-hhmmss").parse(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(new Date()));
+            }catch(ParseException pe) {logger.log(Level.WARNING, pe.getMessage());}
+            
+            stockLog.setStart_date(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(stockDateStart).toString());
+            try{
+                stockLog.setSource("Fidelity");
+                
+                exceptionLogs =   fidelityScraper.scrapeAllSummaryData();
+                Date stockDateEnd = null;
+                
+                try{
+                    stockDateEnd = new SimpleDateFormat("yyyy-MM-dd").parse(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(new Date()));
+                }catch(ParseException pe) {logger.log(Level.WARNING, pe.getMessage());}
+                stockLog.setEnd_date(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(stockDateEnd).toString());
+                stockLog.setStatus("Success");
+                stockLog.setLog("FidelityScraper completed successfully!");
+                if(!exceptionLogs.isEmpty()){
+                    stockLog.setStatus("Failed");
+                    stockLog.setLog("" + exceptionLogs);
+                    dao.insertLog(stockLog);
+                }else{dao.insertLog(stockLog);}
+            
+            }catch(Exception e) {
+                logger.log(Level.WARNING, "Issue has occured and an exception was thorwn during MarketWatch Scrape");
+                Date stockDateEnd = null;
+                try{
+                    stockDateEnd = new SimpleDateFormat("yyyy-MM-dd-hhmmss").parse(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(new Date()));
+                }catch(ParseException pe) {logger.log(Level.WARNING, pe.getMessage());}
+                stockLog.setEnd_date(new SimpleDateFormat("yyyy-MM-dd-hhmmss").format(stockDateEnd).toString());
+                stockLog.setStatus("Failed");
+                stockLog.setLog(e.getMessage());
+                dao.insertLog(stockLog);
+            }
     }
 }
